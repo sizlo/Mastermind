@@ -39,11 +39,8 @@ public class Codemaker {
         // From what's left in the target pattern work out how many pegs in
         // the guess pattern are still the right colour
         for (int targetIndex = 0; targetIndex < Pattern.patternLength; targetIndex++) {
-            if (targetAccountedFor[targetIndex]){
-                continue;
-            }
             for (int guessIndex = 0; guessIndex < Pattern.patternLength; guessIndex++) {
-                if (guessAccountedFor[guessIndex]){
+                if (guessAccountedFor[guessIndex] || targetAccountedFor[targetIndex]){
                     continue;
                 }
                 if (guessPattern.PegAt(guessIndex) == targetPattern.PegAt(targetIndex)){
