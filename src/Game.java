@@ -9,6 +9,8 @@ public class Game {
     private final int numGuessesAllowed = 12;
 
     public Game(IUserInterface ui){
+        this.ui = ui;
+
         breaker = new Codebreaker(ui);
 
         maker = new Codemaker();
@@ -19,12 +21,13 @@ public class Game {
     public void Play(){
         maker.ChooseTarget();
 
-        ui.ShowState(guesses, breaker.numGuesses);
+        ui.ShowState(guesses, breaker.numGuesses, numGuessesAllowed);
 
         while (breaker.numGuesses < numGuessesAllowed){
             Guess g = breaker.MakeGuess();
             maker.CheckGuess(g);
-            ui.ShowState(guesses, breaker.numGuesses);
+            guesses[breaker.numGuesses - 1] = g;
+            ui.ShowState(guesses, breaker.numGuesses, numGuessesAllowed);
         }
     }
 }
