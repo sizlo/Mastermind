@@ -49,8 +49,8 @@ public class ConsoleUI implements IUserInterface {
     }
 
     @Override
-    public void ShowState(Guess[] guesses, int numGuessesSoFar, int numGuessesAllowed){
-        PrintCodeSection();
+    public void ShowState(Guess[] guesses, int numGuessesSoFar, int numGuessesAllowed, boolean revealCode, Pattern targetPattern){
+        PrintCodeSection(revealCode, targetPattern);
         for(int i = 0; i < numGuessesAllowed - numGuessesSoFar; i++){
             PrintEmptyGuess();
         }
@@ -105,7 +105,7 @@ public class ConsoleUI implements IUserInterface {
         return new Pattern(patternColours);
     }
 
-    private void PrintCodeSection(){
+    private void PrintCodeSection(boolean revealCode, Pattern targetPattern){
         int resultLength = Pattern.patternLength / 2;
         if (Pattern.patternLength % 2 == 0){
             resultLength++;
@@ -124,7 +124,12 @@ public class ConsoleUI implements IUserInterface {
         emptyline += " |";
         for (int i = 0; i < Pattern.patternLength; i++){
             seperator += "==";
-            codeline+= " ?";
+            if (revealCode){
+                codeline += " " + GetColourString(targetPattern.PegAt(i));
+            }
+            else {
+                codeline += " ?";
+            }
             emptyline += "  ";
         }
 

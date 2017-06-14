@@ -5,7 +5,7 @@ import java.util.Random;
  * Created by tbrier on 13/06/2017.
  */
 public class Codemaker {
-    Pattern targetPattern;
+    public Pattern targetPattern;
 
     public void ChooseTarget(){
         Colour[] possibleColours = Colour.values();

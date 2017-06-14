@@ -21,13 +21,34 @@ public class Game {
     public void Play(){
         maker.ChooseTarget();
 
-        ui.ShowState(guesses, breaker.numGuesses, numGuessesAllowed);
+        ui.ShowState(guesses, breaker.numGuesses, numGuessesAllowed, false, maker.targetPattern);
+
+        boolean didWin = false;
 
         while (breaker.numGuesses < numGuessesAllowed){
             Guess g = breaker.MakeGuess();
             maker.CheckGuess(g);
             guesses[breaker.numGuesses - 1] = g;
-            ui.ShowState(guesses, breaker.numGuesses, numGuessesAllowed);
+
+            // Break out on win
+            if (g.numRightColourRightPlace == Pattern.patternLength){
+                didWin = true;
+                break;
+            }
+
+            ui.ShowState(guesses, breaker.numGuesses, numGuessesAllowed, false, maker.targetPattern);
+        }
+
+        ui.ShowState(guesses, breaker.numGuesses, numGuessesAllowed, true, maker.targetPattern);
+
+        System.out.println();
+        if (didWin)
+        {
+            System.out.println("Won in " + breaker.numGuesses + " moves");
+        }
+        else
+        {
+            System.out.println("Lost");
         }
     }
 }
