@@ -107,7 +107,7 @@ public class ConsoleUI implements IUserInterface {
 
     private void PrintCodeSection(boolean revealCode, Pattern targetPattern){
         int resultLength = Pattern.patternLength / 2;
-        if (Pattern.patternLength % 2 == 0){
+        if (Pattern.patternLength % 2 != 0){
             resultLength++;
         }
 
@@ -141,7 +141,7 @@ public class ConsoleUI implements IUserInterface {
 
     private void PrintEmptyGuess(){
         int resultLength = Pattern.patternLength / 2;
-        if (Pattern.patternLength % 2 == 0){
+        if (Pattern.patternLength % 2 != 0){
             resultLength++;
         }
 
@@ -192,7 +192,7 @@ public class ConsoleUI implements IUserInterface {
         int resultStringMidpoint = resultStringOneLine.length() / 2;
 
         int resultLength = Pattern.patternLength / 2;
-        if (Pattern.patternLength % 2 == 0){
+        if (Pattern.patternLength % 2 != 0){
             resultLength++;
         }
 
