@@ -17,13 +17,18 @@ public class ConsoleUI implements IUserInterface {
     // Map a colour to the char that represents it
     private Map<Colour, Character> colourToChar;
 
+    // Map a colour to the string needed to print in that colour
+    private Map<Colour, String> colourToAnsiColour;
+
+    private final String resetColour = "\u001B[0m";
+
     public ConsoleUI(){
         charToColour = new HashMap<Character, Colour>();
         charToColour.put('R', Colour.RED);
         charToColour.put('G', Colour.GREEN);
         charToColour.put('B', Colour.BLUE);
         charToColour.put('Y', Colour.YELLOW);
-        charToColour.put('O', Colour.ORANGE);
+        charToColour.put('C', Colour.CYAN);
         charToColour.put('P', Colour.PURPLE);
 
         colourToChar = new EnumMap<Colour, Character>(Colour.class);
@@ -31,8 +36,16 @@ public class ConsoleUI implements IUserInterface {
         colourToChar.put(Colour.GREEN, 'G');
         colourToChar.put(Colour.BLUE, 'B');
         colourToChar.put(Colour.YELLOW, 'Y');
-        colourToChar.put(Colour.ORANGE, 'O');
+        colourToChar.put(Colour.CYAN, 'C');
         colourToChar.put(Colour.PURPLE, 'P');
+
+        colourToAnsiColour = new EnumMap<Colour, String>(Colour.class);
+        colourToAnsiColour.put(Colour.RED, "\u001B[31m");
+        colourToAnsiColour.put(Colour.GREEN, "\u001B[32m");
+        colourToAnsiColour.put(Colour.BLUE, "\u001B[34m");
+        colourToAnsiColour.put(Colour.YELLOW, "\u001B[33m");
+        colourToAnsiColour.put(Colour.CYAN, "\u001B[36m");
+        colourToAnsiColour.put(Colour.PURPLE, "\u001B[35m");
     }
 
     @Override
@@ -48,7 +61,7 @@ public class ConsoleUI implements IUserInterface {
 
     @Override
     public Guess WaitForGuess(){
-        System.out.print("Enter guess pattern (RGBYOP) of length " + Pattern.patternLength);
+        System.out.print("Enter guess pattern (RGBYCP) of length " + Pattern.patternLength);
         return new Guess(ReadPattern());
 
     }
@@ -152,6 +165,10 @@ public class ConsoleUI implements IUserInterface {
         System.out.println(seperator);
     }
 
+    private String GetColourString(Colour c){
+        return colourToAnsiColour.get(c) + colourToChar.get(c) + resetColour;
+    }
+
     private void PrintGuess(Guess g){
         String resultStringOneLine = "";
         for (int i = 0; i < g.numRightColourRightPlace; i++){
@@ -188,7 +205,7 @@ public class ConsoleUI implements IUserInterface {
 
         for (int i = 0; i < Pattern.patternLength; i++){
             seperator += "--";
-            codeline += " " + colourToChar.get(g.guessPattern.PegAt(i));
+            codeline += " " + GetColourString(g.guessPattern.PegAt(i));
             emptyline += "  ";
         }
 
