@@ -36,7 +36,10 @@ public class Game {
                 break;
             }
 
-            ui.ShowState(guesses, breaker.numGuesses, numGuessesAllowed, false, maker.targetPattern);
+            // Don't show the state after the last guess
+            if (breaker.numGuesses < numGuessesAllowed) {
+                ui.ShowState(guesses, breaker.numGuesses, numGuessesAllowed, false, maker.targetPattern);
+            }
         }
 
         ui.ShowState(guesses, breaker.numGuesses, numGuessesAllowed, true, maker.targetPattern);
