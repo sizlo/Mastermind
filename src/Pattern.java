@@ -12,4 +12,14 @@ public class Pattern {
     public Colour PegAt(int index){
         return patternColours[index];
     }
+
+
+    public boolean equals(Pattern other) {
+        for (int i = 0; i < patternLength; i++){
+            if (this.patternColours[i] != other.patternColours[i]){
+                return false;
+            }
+        }
+        return true;
+    }
 }
