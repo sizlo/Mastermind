@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,9 @@ public class ConsoleUI implements IUserInterface {
     // Map char to a colour it represents
     private Map<Character, Colour> charToColour;
 
+    // Map a colour to the char that represents it
+    private Map<Colour, Character> colourToChar;
+
     public ConsoleUI(){
         charToColour = new HashMap<Character, Colour>();
         charToColour.put('R', Colour.RED);
@@ -21,11 +25,25 @@ public class ConsoleUI implements IUserInterface {
         charToColour.put('Y', Colour.YELLOW);
         charToColour.put('O', Colour.ORANGE);
         charToColour.put('P', Colour.PURPLE);
+
+        colourToChar = new EnumMap<Colour, Character>(Colour.class);
+        colourToChar.put(Colour.RED, 'R');
+        colourToChar.put(Colour.GREEN, 'G');
+        colourToChar.put(Colour.BLUE, 'B');
+        colourToChar.put(Colour.YELLOW, 'Y');
+        colourToChar.put(Colour.ORANGE, 'O');
+        colourToChar.put(Colour.PURPLE, 'P');
     }
 
     @Override
-    public void ShowState(){
-        System.out.print("ShowState() STUB");
+    public void ShowState(Guess[] guesses, int numGuessesSoFar, int numGuessesAllowed){
+        PrintCodeSection();
+        for(int i = 0; i < numGuessesAllowed - numGuessesSoFar; i++){
+            PrintEmptyGuess();
+        }
+        for (int i = numGuessesSoFar - 1; i >= 0; i--){
+            PrintGuess(guesses[i]);
+        }
     }
 
     @Override
@@ -72,5 +90,110 @@ public class ConsoleUI implements IUserInterface {
         }
 
         return new Pattern(patternColours);
+    }
+
+    private void PrintCodeSection(){
+        int resultLength = Pattern.patternLength / 2;
+        if (Pattern.patternLength % 2 == 0){
+            resultLength++;
+        }
+
+        String seperator = "";
+        String codeline = "";
+        String emptyline = "";
+        for (int i = 0; i < resultLength; i++){
+            seperator += "=";
+            codeline += " ";
+            emptyline += " ";
+        }
+        seperator += "==";
+        codeline+= " |";
+        emptyline += " |";
+        for (int i = 0; i < Pattern.patternLength; i++){
+            seperator += "==";
+            codeline+= " ?";
+            emptyline += "  ";
+        }
+
+        System.out.println(seperator);
+        System.out.println(codeline);
+        System.out.println(emptyline);
+        System.out.println(seperator);
+    }
+
+    private void PrintEmptyGuess(){
+        int resultLength = Pattern.patternLength / 2;
+        if (Pattern.patternLength % 2 == 0){
+            resultLength++;
+        }
+
+        String seperator = "";
+        String codeline = "";
+        String emptyline = "";
+
+        for (int i = 0; i < resultLength; i++){
+            seperator += "-";
+            codeline += " ";
+            emptyline += " ";
+        }
+
+        seperator += "--";
+        codeline += " |";
+        emptyline += " |";
+
+        for (int i = 0; i < Pattern.patternLength; i++){
+            seperator += "--";
+            codeline += "  ";
+            emptyline += "  ";
+        }
+
+        System.out.println(codeline);
+        System.out.println(emptyline);
+        System.out.println(seperator);
+    }
+
+    private void PrintGuess(Guess g){
+        String resultStringOneLine = "";
+        for (int i = 0; i < g.numRightColourRightPlace; i++){
+            resultStringOneLine += "●";
+        }
+        for (int i = 0; i < g.numRightColourWrongPlace; i++){
+            resultStringOneLine += "○";
+        }
+        int totalResultPegs = g.numRightColourRightPlace + g.numRightColourWrongPlace;
+        for (int i = 0; i < Pattern.patternLength - totalResultPegs; i++){
+            resultStringOneLine += " ";
+        }
+        if (Pattern.patternLength % 2 != 0){
+            resultStringOneLine += " ";
+        }
+        int resultStringMidpoint = resultStringOneLine.length() / 2;
+
+        int resultLength = Pattern.patternLength / 2;
+        if (Pattern.patternLength % 2 == 0){
+            resultLength++;
+        }
+
+        String seperator = "";
+        String codeline = resultStringOneLine.substring(0, resultStringMidpoint);
+        String emptyline = resultStringOneLine.substring(resultStringMidpoint);
+
+        for (int i = 0; i < resultLength; i++){
+            seperator += "-";
+        }
+
+        seperator += "--";
+        codeline += " |";
+        emptyline += " |";
+
+        for (int i = 0; i < Pattern.patternLength; i++){
+            seperator += "--";
+            codeline += " " + colourToChar.get(g.guessPattern.PegAt(i));
+            emptyline += "  ";
+        }
+
+        System.out.println(codeline);
+        System.out.println(emptyline);
+        System.out.println(seperator);
     }
 }
